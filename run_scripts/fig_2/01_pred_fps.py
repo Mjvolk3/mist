@@ -4,19 +4,19 @@ Make FP predictions with the binned FFN model and MIST models and process these
 into figures.
 
 """
+import shutil
 import subprocess
 from collections import defaultdict
 from pathlib import Path
-import shutil
 
 dirs = [
     "results/2022_10_06_ffn_binned_csi_best",
-    "results/2022_10_25_mist_csi_best_ensemble"
+    "results/2022_10_25_mist_csi_best_ensemble",
 ]
 
 num_workers = 16
 dataset_name = "csi2022"
-base_script = f"python3 run_scripts/pred_fp.py --dataset-name {dataset_name} --num-workers {num_workers} --gpu --output-targs --subset-datasets test_only"
+base_script = f"python run_scripts/pred_fp.py --dataset-name {dataset_name} --num-workers {num_workers} --gpu --output-targs --subset-datasets test_only"
 
 # Merge strat determines if we want to make single model or ensemble model
 # predictions
@@ -31,7 +31,7 @@ for dir_ in dirs:
         savedir = ckpt.parent / "preds"
         cmd = f"{base_script} --model-ckpt {str(ckpt)} --save-dir {savedir}"
 
-        #subprocess.call(cmd, shell=True)
+        # subprocess.call(cmd, shell=True)
         output_fp = list(savedir.glob("*.p"))[0]
         fold_to_fp[fold_name].append(output_fp)
 
@@ -47,7 +47,7 @@ for dir_ in dirs:
             cmd = f"python analysis/fp_preds/average_model_fp_preds.py --fp-files {str_preds} --save-name {save_name}"
 
             # average predictions
-            #subprocess.call(cmd, shell=True)
+            # subprocess.call(cmd, shell=True)
 
     elif merge_strat == "single":
         for k, v in fold_to_fp.items():
@@ -68,27 +68,28 @@ for dir_ in outdirs:
     merge_str = f"python analysis/fp_preds/cat_fp_preds.py --in-files {pred_files_str} --out {out_file}"
 
     print(merge_str)
-    #subprocess.call(merge_str, shell=True)
+    # subprocess.call(merge_str, shell=True)
 
 
 # Conduct plotting
 ffn_fp_file = f"results/2022_10_06_ffn_binned_csi_best/out_preds_{merge_strat}/preds/merged_fp_preds.p"
 mist_fp_file = f"results/2022_10_25_mist_csi_best_ensemble/out_preds_{merge_strat}/preds/merged_fp_preds.p"
-csi_fp_file = "data/paired_spectra/csi2022/prev_results/spectra_encoding_csi2022_Fold_012.p"
+csi_fp_file = (
+    "data/paired_spectra/csi2022/prev_results/spectra_encoding_csi2022_Fold_012.p"
+)
 res_folder = Path(mist_fp_file).parent / "plots"
 res_folder.mkdir(exist_ok=True)
 
 
 # Scatter plots
-cmds = [f"python3 analysis/fp_preds/fp_scatter.py --fp-pred-file {mist_fp_file} --csi-baseline {csi_fp_file} --metric Cosine --pool-method spectra --png",
-        f"python3 analysis/fp_preds/fp_scatter.py --fp-pred-file {mist_fp_file} --csi-baseline {csi_fp_file} --metric LL --pool-method spectra --png",
-        f"python3 analysis/fp_preds/fp_scatter.py --fp-pred-file {mist_fp_file} --csi-baseline {csi_fp_file} --metric LL --pool-method bit --png", 
-
-        # Boxplot
-        f"python3 analysis/fp_preds/fp_boxplot.py --fp-pred-files {csi_fp_file} {mist_fp_file} {ffn_fp_file} --model-names CSI:FingerID MIST FFN --save-name {res_folder / 'boxplot.pdf'}",
-
-        # Barplot
-        f"python analysis/fp_preds/cls_barplot.py --pred-file {mist_fp_file} --labels-file data/paired_spectra/csi2022/labels.tsv --baseline {csi_fp_file} --save-name {res_folder / 'barplot.png'} --png"
+cmds = [
+    f"python analysis/fp_preds/fp_scatter.py --fp-pred-file {mist_fp_file} --csi-baseline {csi_fp_file} --metric Cosine --pool-method spectra --png",
+    f"pythonanalysis/fp_preds/fp_scatter.py --fp-pred-file {mist_fp_file} --csi-baseline {csi_fp_file} --metric LL --pool-method spectra --png",
+    f"python analysis/fp_preds/fp_scatter.py --fp-pred-file {mist_fp_file} --csi-baseline {csi_fp_file} --metric LL --pool-method bit --png",
+    # Boxplot
+    f"pythonnalysis/fp_preds/fp_boxplot.py --fp-pred-files {csi_fp_file} {mist_fp_file} {ffn_fp_file} --model-names CSI:FingerID MIST FFN --save-name {res_folder / 'boxplot.pdf'}",
+    # Barplot
+    f"python analysis/fp_preds/cls_barplot.py --pred-file {mist_fp_file} --labels-file data/paired_spectra/csi2022/labels.tsv --baseline {csi_fp_file} --save-name {res_folder / 'barplot.png'} --png",
 ]
 
 for cmd in cmds:

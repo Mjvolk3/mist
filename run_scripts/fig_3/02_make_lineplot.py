@@ -15,7 +15,7 @@ contrast_outdir = Path(contrast_dir) / f"out_retrieval_all"
 contrast_outdir.mkdir(exist_ok=True)
 for ckpt in Path(contrast_dir).rglob("*.ckpt"):
     if "Fold_0" in str(ckpt):
-        cmd = f"python3 run_scripts/embed_contrastive.py --gpu --num-workers {num_workers} --dataset-name csi2022 --model-ckpt {ckpt} --save-dir {save_dir} --subset test_only"
+        cmd = f"python run_scripts/embed_contrastive.py --gpu --num-workers {num_workers} --dataset-name csi2022 --model-ckpt {ckpt} --save-dir {save_dir} --subset test_only"
         print(cmd)
         subprocess.run(cmd, shell=True)
         embed_out = list(save_dir.glob("*.p"))[0]
@@ -29,4 +29,4 @@ print(lineplot_cmd)
 subprocess.run(lineplot_cmd, shell=True)
 
 umap_cmd = f"python analysis/embedding/embed_umap.py --umap-embeddings {embed_out} --save-name {save_dir / 'umap.png'} --png"
-#subprocess.run(umap_cmd, shell=True)
+# subprocess.run(umap_cmd, shell=True)

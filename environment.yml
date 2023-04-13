@@ -17,6 +17,6 @@ dependencies:
 - nb_conda_kernels=2.3.* # [x] mv → conda
 - seaborn=0.11.* # [x] mv → pip
 - h5py # [x] mv → pip
-- ray-tune # [x] mv → pip install -U "ray[tune]"
+# - ray-tune # [x] mv → pip install -U "ray[tune]"
 - umap-learn # [x] mv → pip
 - optuna # [x] mv →pip

@@ -29,18 +29,19 @@ and transformed before being fed into the corresponding program.
         - run_2_replacement : [new_val3, new_val4]
 """
 
-from pathlib import Path
-import shutil
-import hashlib
-import subprocess
-import copy
-import time
-import itertools
-from datetime import datetime
 import argparse
+import copy
+import hashlib
+import itertools
+import shutil
+import subprocess
+import time
+from datetime import datetime
+from pathlib import Path
+
 import yaml
 
-PYTHON_NAME = "python3"
+PYTHON_NAME = "python"
 
 
 def md5(key: str) -> str:
@@ -115,7 +116,7 @@ def build_python_string(
 
     time_and_hash = f"{time_stamp_seconds}_{args_hash}"
 
-    general_flags = "" 
+    general_flags = ""
     for arg_name, arg_value in arg_dict.items():
         # Handle specific arguments here
         if arg_name == "_slurm_args":
@@ -175,13 +176,13 @@ def convert_flag(flag_key, flag_value):
 
 def get_launcher_log_name(experiment_folder):
     """Return an appropriate launcher log file"""
-    launcher_path = Path(experiment_folder) /  "launcher_log_1.log"
+    launcher_path = Path(experiment_folder) / "launcher_log_1.log"
 
     # Keep incrementing the counter
     ctr = 1
     while launcher_path.exists():
         new_file = f"launcher_log_{ctr}.log"
-        launcher_path = Path(experiment_folder) /  new_file
+        launcher_path = Path(experiment_folder) / new_file
         ctr += 1
     return launcher_path
 
@@ -211,7 +212,6 @@ def main(
 
     # Loop over major arguments
     for arg_sublist in iterative_args:
-
         # Update universal args with iterative args
         # This overrides universal args with specific ones
         base_args = copy.deepcopy(universal_args)
@@ -240,7 +240,6 @@ def main(
     scripts_to_run = []
     launch_method = launcher_args.get("launch_method", "local")
     for str_num, (sbatch_args, python_str) in enumerate(program_strs):
-
         time.sleep(0.1)
         if launch_method == "slurm":
             slurm_script = launcher_args.get(
@@ -276,7 +275,6 @@ def main(
             if log is not None:
                 log.write(cmd_str + "\n")
     elif launch_method == "local_parallel":
-
         # Parallelize to several gpus
         vis_devices = launcher_args.get("visible_devices", None)
         if vis_devices is None:
@@ -296,8 +294,9 @@ def main(
         # Single file to run alll launch scripts
         launch_all = f"{launcher_path.parent / launcher_path.stem}_launch_all.sh"
         with open(launch_all, "w") as fp:
-            temp_str = [f"sh {i} > logs/{Path(i).name}.log &" 
-                        for i in list(sh_run_files)]
+            temp_str = [
+                f"sh {i} > logs/{Path(i).name}.log &" for i in list(sh_run_files)
+            ]
             fp.write("\n".join(temp_str))
         print(f"Runnings script: {launch_all}")
         subprocess.call(f"sh {launch_all}", shell=True)

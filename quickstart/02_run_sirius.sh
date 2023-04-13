@@ -1,4 +1,6 @@
-SIRIUS=sirius/bin/sirius
+# Change depending on OS
+# SIRIUS=sirius/bin/sirius
+SIRIUS=sirius.app/Contents/MacOS/sirius
 CORES=32
 
 # Assumes we know the correct chemical formula

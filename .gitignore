@@ -160,3 +160,10 @@ cython_debug/
 
 # Dendron
 notes/.dendron.cache.json
+sirius.app
+
+# Siris OS specific 
+data_processing/canopus_train/02_run_sirius.sh
+data_processing/mills/02_run_sirius_mills_chunks.sh
+data_processing/mills/02_run_sirius_mills.sh
+quickstart/02_run_sirius.sh

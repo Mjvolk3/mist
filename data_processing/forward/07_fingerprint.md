@@ -11,7 +11,7 @@ cp data/unpaired_mols/bio_mols/all_smis.txt ../MSNovelist/fp_data/all_smis_csi20
 
 cd ../MSNovelist
 
-python3 /fp_scripts/fingerprint_smiles.py --fp-map /fp_scripts/fp_map.p --smi-list /fp_data/all_smis_csi2022.txt --out-prefix cache_csi_csi2022 --workers 20 
+python /fp_scripts/fingerprint_smiles.py --fp-map /fp_scripts/fp_map.p --smi-list /fp_data/all_smis_csi2022.txt --out-prefix cache_csi_csi2022 --workers 20 
 
 mv ../MSNovelist/fp_data/fp_out/cache_csi_csi2022* fingerprints/precomputed_fp/
 ```

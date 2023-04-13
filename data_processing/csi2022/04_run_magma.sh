@@ -21,10 +21,10 @@ conda activate ms-gen
 magma_file=src/mist/magma/run_magma.py
 
 echo "Magma on casmi"
-python3 $magma_file --spectra-dir data/paired_spectra/casmi/sirius_outputs  --output-dir data/paired_spectra/casmi/magma_outputs  --spec-labels data/paired_spectra/casmi/labels.tsv
+python $magma_file --spectra-dir data/paired_spectra/casmi/sirius_outputs  --output-dir data/paired_spectra/casmi/magma_outputs  --spec-labels data/paired_spectra/casmi/labels.tsv
 
 echo "Magma on csi2022_debug"
-python3 $magma_file  --spectra-dir data/paired_spectra/csi2022_debug/sirius_outputs  --output-dir data/paired_spectra/csi2022_debug/magma_outputs  --spec-labels data/paired_spectra/csi2022_debug/labels.tsv
+python $magma_file  --spectra-dir data/paired_spectra/csi2022_debug/sirius_outputs  --output-dir data/paired_spectra/csi2022_debug/magma_outputs  --spec-labels data/paired_spectra/csi2022_debug/labels.tsv
 
 echo "Magma on csi2022"
-python3 $magma_file --spectra-dir data/paired_spectra/csi2022/sirius_outputs  --output-dir data/paired_spectra/csi2022/magma_outputs  --spec-labels data/paired_spectra/csi2022/labels.tsv
+python $magma_file --spectra-dir data/paired_spectra/csi2022/sirius_outputs  --output-dir data/paired_spectra/csi2022/magma_outputs  --spec-labels data/paired_spectra/csi2022/labels.tsv

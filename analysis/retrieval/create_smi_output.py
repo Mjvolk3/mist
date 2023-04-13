@@ -7,12 +7,13 @@ with the top k smiles from database retrieval.
 Cmd:
 
 ```
-python3 analysis/retrieval/create_smi_output.py --names-file data/paired_spectra/csi2022/retrieval_hdf/intpubchem_with_morgan4096_retrieval_db_names.p --ranking results/2022_08_27_mist_no_aug_morgan/2022_08_27-1256_011159_589fafcd07beca2529bd6deab4354946/retrieval/retrieval_fp_intpubchem_with_morgan4096_retrieval_db_csi2022_cosine_0.p --k 10
+python analysis/retrieval/create_smi_output.py --names-file data/paired_spectra/csi2022/retrieval_hdf/intpubchem_with_morgan4096_retrieval_db_names.p --ranking results/2022_08_27_mist_no_aug_morgan/2022_08_27-1256_011159_589fafcd07beca2529bd6deab4354946/retrieval/retrieval_fp_intpubchem_with_morgan4096_retrieval_db_csi2022_cosine_0.p --k 10
 ```
 """
+import argparse
 import pickle
 from pathlib import Path
-import argparse
+
 import numpy as np
 import pandas as pd
 from tqdm import tqdm

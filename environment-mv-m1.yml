@@ -1,0 +1,6 @@
+name: ms-gen
+channels:
+- conda-forge
+dependencies:
+- nb_conda_kernels
+- python=3.8.*

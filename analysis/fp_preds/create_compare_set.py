@@ -6,15 +6,16 @@ retrieval comparisons
 
 Example call:
 
-python3 process_results/create_compare_set.py --in-file results/2022_05_13_growing_ms_worst_high_lambda/2022_05_13-071210_783e0ba6950ce9146c97770c1c1195fc/spectra_encoding_csi2022.p --csi-input data/paired_spectra/csi2022/prev_results/spectra_encoding_csi2022.p --out-dir 2022_05_15_order_study --debug --replace-strategies random likelihood_diff_desc likelihood_diff_asc likelihood_desc likelihood_asc var_desc var_asc norm_ll_asc norm_ll_desc 
+python process_results/create_compare_set.py --in-file results/2022_05_13_growing_ms_worst_high_lambda/2022_05_13-071210_783e0ba6950ce9146c97770c1c1195fc/spectra_encoding_csi2022.p --csi-input data/paired_spectra/csi2022/prev_results/spectra_encoding_csi2022.p --out-dir 2022_05_15_order_study --debug --replace-strategies random likelihood_diff_desc likelihood_diff_asc likelihood_desc likelihood_asc var_desc var_asc norm_ll_asc norm_ll_desc 
 
 """
 
-import numpy as np
-import pickle
-from pathlib import Path
 import argparse
 import copy
+import pickle
+from pathlib import Path
+
+import numpy as np
 
 
 def clamped_log(x, clamp_val=-100):
@@ -206,7 +207,6 @@ if __name__ == "__main__":
     # For each of these, replace the fingerprints and make a new one
     output_entries = []
     for replace_strategy in replace_strategies:
-
         # Compute different strategies
         if replace_strategy == "random":
             sorted_bits = random_order(my_targs, my_preds, csi_targs, csi_preds)
@@ -246,7 +246,6 @@ if __name__ == "__main__":
             raise NotImplementedError()
 
         for replace_amt in replace_intervals:
-
             # Copy and replace with csi bit preds
             pred_copy = my_preds.copy()
             if clip:

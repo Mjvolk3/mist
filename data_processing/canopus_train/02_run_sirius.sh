@@ -25,4 +25,4 @@ conda activate ms-gen
 #$SIRIUS --cores 30 --output  data/paired_spectra/canopus_train/sirius_outputs/ --naming-convention %filename --input data/paired_spectra/canopus_train/spec_files/ formula --ppm-max-ms2 30
 
 echo "Summarizing canopus train"
-python3 src/mist/sirius/summarize_sirius.py --labels-file  data/paired_spectra/canopus_train/labels.tsv --sirius-folder  data/paired_spectra/canopus_train/sirius_outputs
+python src/mist/sirius/summarize_sirius.py --labels-file  data/paired_spectra/canopus_train/labels.tsv --sirius-folder  data/paired_spectra/canopus_train/sirius_outputs

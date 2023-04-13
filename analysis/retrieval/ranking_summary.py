@@ -4,14 +4,15 @@ Given the results from extract_rankings.py, compute the ranking table
 
 Cmd:
 ```
-python3 analysis/retrieval/ranking_summary.py --ranking-file
+python analysis/retrieval/ranking_summary.py --ranking-file
 ```
 """
-import pickle
 import argparse
+import json
+import pickle
+
 import numpy as np
 import pandas as pd
-import json
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--ranking-file", help="Pred ranking file")

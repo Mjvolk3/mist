@@ -7,18 +7,19 @@ Set None for any example not found
 
 Cmd:
 ```
-python3 analysis/retrieval/extract_rankings.py --true-ranking
+python analysis/retrieval/extract_rankings.py --true-ranking
 data/paired_spectra/csi2022/retrieval_hdf/pubchem_with_csi_retrieval_db_ranked.p
 --labels data/paired_spectra/csi2022/labels.tsv --ranking
 results/2022_08_22_mist_best_aug_fast_lr/2022_08_22-2021_050461_b98650637903469ce90e91e258e9e363/preds/retrieval/retrieval_fp/retrieval_fp_pubchem_with_csi_retrieval_db_csi2022_cosine_0.p
 ```
 """
+import argparse
+import json
 import pickle
 from pathlib import Path
-import argparse
+
 import numpy as np
 import pandas as pd
-import json
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--true-ranking", help="Name of file containing true ranking")

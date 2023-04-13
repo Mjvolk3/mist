@@ -6,16 +6,16 @@ tsv, compute stats about top 1 accuracy
 
 Cmd:
 ```
-python3 analysis/retrieval/stats_from_smi_output.py --labels
+python analysis/retrieval/stats_from_smi_output.py --labels
 data/paired_spectra/broad/labels.tsv  --out-tsv
 Results/2022_08_27_mist_no_aug_morgan/2022_08_27-1256_011159_589fafcd07beca2529bd6deab4354946/retrieval/retrieval_fp_intpubchem_with_morgan4096_retrieval_db_broad_cosine_0_k_smi.tsv
 ```
 """
 import argparse
-import numpy as np
-import pandas as pd
 import json
 
+import numpy as np
+import pandas as pd
 from rdkit import Chem
 
 parser = argparse.ArgumentParser()

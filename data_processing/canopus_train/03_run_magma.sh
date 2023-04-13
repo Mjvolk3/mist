@@ -20,4 +20,4 @@ conda activate ms-gen
 magma_file=src/mist/magma/run_magma.py
 
 echo "Magma on canopus_train"
-python3 $magma_file --spectra-dir data/paired_spectra/canopus_train/sirius_outputs  --output-dir data/paired_spectra/canopus_train/magma_outputs  --spec-labels data/paired_spectra/canopus_train/labels.tsv 
+python $magma_file --spectra-dir data/paired_spectra/canopus_train/sirius_outputs  --output-dir data/paired_spectra/canopus_train/magma_outputs  --spec-labels data/paired_spectra/canopus_train/labels.tsv 

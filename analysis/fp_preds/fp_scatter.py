@@ -5,22 +5,22 @@ prediction outputs
 
 Example:
 
-python3 analysis/fp_preds/fp_scatter.py --fp-pred-file results/2022_08_17_mist_best_adds/2022_08_17-2211_769018_47b29f2b02eedd95bda7018f5d9acf55/preds/fp_preds_csi2022.p --csi-baseline data/paired_spectra/csi2022/prev_results/spectra_encoding_csi2022_Fold_0.p
+python analysis/fp_preds/fp_scatter.py --fp-pred-file results/2022_08_17_mist_best_adds/2022_08_17-2211_769018_47b29f2b02eedd95bda7018f5d9acf55/preds/fp_preds_csi2022.p --csi-baseline data/paired_spectra/csi2022/prev_results/spectra_encoding_csi2022_Fold_0.p
 
 Change metric and pool method
 
 """
 import argparse
-from pathlib import Path
-import numpy as np
 import pickle
 from functools import partial
+from pathlib import Path
+
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
 from sklearn.metrics.pairwise import cosine_similarity
 
 from mist import utils
-
-import matplotlib.pyplot as plt
-import seaborn as sns
 from mist.utils.plot_utils import *
 
 set_style()

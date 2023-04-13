@@ -2,14 +2,16 @@
 
 Create full smiles list including labels files
 
-python3 data_processing/forward/04_create_smi_list_full.py --unpaired-smis data/unpaired_mols/bio_mols/subsample_smi.txt --labels data/paired_spectra/csi2022/labels.tsv --out data/unpaired_mols/bio_mols/all_smis.txt
+python data_processing/forward/04_create_smi_list_full.py --unpaired-smis data/unpaired_mols/bio_mols/subsample_smi.txt --labels data/paired_spectra/csi2022/labels.tsv --out data/unpaired_mols/bio_mols/all_smis.txt
 
 """
 
 import argparse
-import pandas as pd
+
 import numpy as np
+import pandas as pd
 from rdkit import Chem
+
 from mist import utils
 
 

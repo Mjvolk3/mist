@@ -115,7 +115,7 @@ A mist model can be trained using the command `python run_scripts/train_mist.py`
 
 ```
 mkdir results/model_train_demos
-python3 run_scripts/train_mist.py --cache-featurizers --dataset-name 'canopus_train_public' --fp-names morgan4096 --num-workers 12 --seed 1 --gpus 0 --split-file 'data/paired_spectra/canopus_train_public/splits/canopus_hplus_100_0.csv' --splitter-name 'preset' --augment-data --augment-prob 0.5 --batch-size 128 --inten-prob 0.1 --remove-prob 0.5 --remove-weights 'exp' --iterative-preds 'growing' --iterative-loss-weight 0.4 --learning-rate 0.00077 --weight-decay 1e-07 --max-epochs 600 --min-lr 0.0001 --lr-decay-time 10000 --lr-decay-frac 0.95 --hidden-size 256 --num-heads 8 --pairwise-featurization --peak-attn-layers 2 --refine-layers 4 --set-pooling 'cls' --spectra-dropout 0.1 --single-form-encoder --recycle-form-encoder --use-cls --cls-type 'ms1' --loss-fn 'cosine' --magma-aux-loss --frag-fps-loss-lambda 8 --magma-modulo 512 --patience 30 --save-dir 'mist_fp_model' --save-dir results/model_train_demos/mist_fp_model
+python run_scripts/train_mist.py --cache-featurizers --dataset-name 'canopus_train_public' --fp-names morgan4096 --num-workers 12 --seed 1 --gpus 0 --split-file 'data/paired_spectra/canopus_train_public/splits/canopus_hplus_100_0.csv' --splitter-name 'preset' --augment-data --augment-prob 0.5 --batch-size 128 --inten-prob 0.1 --remove-prob 0.5 --remove-weights 'exp' --iterative-preds 'growing' --iterative-loss-weight 0.4 --learning-rate 0.00077 --weight-decay 1e-07 --max-epochs 600 --min-lr 0.0001 --lr-decay-time 10000 --lr-decay-frac 0.95 --hidden-size 256 --num-heads 8 --pairwise-featurization --peak-attn-layers 2 --refine-layers 4 --set-pooling 'cls' --spectra-dropout 0.1 --single-form-encoder --recycle-form-encoder --use-cls --cls-type 'ms1' --loss-fn 'cosine' --magma-aux-loss --frag-fps-loss-lambda 8 --magma-modulo 512 --patience 30 --save-dir 'mist_fp_model' --save-dir results/model_train_demos/mist_fp_model
 ``` 
 
 For illustrative purposes, this call does not utilize forward augmented data.
@@ -127,7 +127,7 @@ Model predictions can be generated using the arguments specified by `run_scripts
 As a baseline, we also train FFN models similar to MetFID using the command `python run_scripts/train_ffn_binned.py`. Example usage: 
 
 ```
-python3 run_scripts/train_ffn_binned.py --cache-featurizers --dataset-name 'canopus_train_public' --fp-names morgan4096 --num-workers 12 --seed 1 --gpus 0 --split-file 'data/paired_spectra/canopus_train_public/splits/canopus_hplus_100_0.csv' --splitter-name 'preset' --augment-prob 0.5 --batch-size 128 --inten-prob 0.1 --remove-prob 0.5 --remove-weights 'exp' --iterative-loss-weight 0.5 --iterative-preds 'none' --learning-rate 0.00087 --weight-decay 1e-07 --max-epochs 600 --min-lr 1e-05 --lr-decay-time 10000 --hidden-size 512 --num-spec-layers 2 --num-bins 11000 --spectra-dropout 0.3 --patience 60 --loss-fn 'cosine' --save-dir 'ffn_fp_model' --save-dir results/model_train_demos/ffn_fp_model
+python run_scripts/train_ffn_binned.py --cache-featurizers --dataset-name 'canopus_train_public' --fp-names morgan4096 --num-workers 12 --seed 1 --gpus 0 --split-file 'data/paired_spectra/canopus_train_public/splits/canopus_hplus_100_0.csv' --splitter-name 'preset' --augment-prob 0.5 --batch-size 128 --inten-prob 0.1 --remove-prob 0.5 --remove-weights 'exp' --iterative-loss-weight 0.5 --iterative-preds 'none' --learning-rate 0.00087 --weight-decay 1e-07 --max-epochs 600 --min-lr 1e-05 --lr-decay-time 10000 --hidden-size 512 --num-spec-layers 2 --num-bins 11000 --spectra-dropout 0.3 --patience 60 --loss-fn 'cosine' --save-dir 'ffn_fp_model' --save-dir results/model_train_demos/ffn_fp_model
 ```
 
 The same `run_scripts/pred_fp.py` script can be used to make predicitons with a trained model.
@@ -149,14 +149,14 @@ wget https://www.dropbox.com/s/fq3mr3mauanqthb/cid_smiles.txt
 After downloading pubchem, a new retrieval database can be generated using the following commands, which will build hdf files taking >20G of space for retrieval and contrastive learning:
 
 ```
-python3 data_processing/canopus_train_public/01_retrieval_hdf.py
+python data_processing/canopus_train_public/01_retrieval_hdf.py
 ```
 
 Contrastive models can be trained afterward.
 
 
 ```
-python3 run_scripts/train_contrastive.py --seed 1 --dataset-name 'canopus_train_public' --compound-lib 'intpubchem' --splitter-name 'preset' --augment-data --augment-prob 0.5 --remove-prob 0.5 --remove-weights 'exp' --inten-prob 0.1 --frac-orig 0.2 --dist-name 'cosine' --contrastive-loss 'nce' --contrastive-decoy-pool 'mean' --contrastive-latent 'h0' --contrastive-weight 0.6 --contrastive-scale 16 --contrastive-bias 0.0 --num-decoys 64 --max-db-decoys 256 --decoy-norm-exp 4 --negative-strategy 'hardisomer_tani_pickled' --learning-rate 0.00057 --weight-decay 1e-07 --min-lr '5e-06' --scheduler --lr-decay-time 10000 --lr-decay-frac 0.7138 --patience 10 --max-epochs 500 --gpus 0 --batch-size 32 --num-workers 12 --cache-featurizers --ckpt-file 'results/model_train_demos/mist_fp_model/Fold_100_0/best.ckpt' --split-file 'data/paired_spectra/canopus_train_public/splits/canopus_hplus_100_0.csv' --save-dir 'contrast_model' --save-dir results/model_train_demos/contrast_model
+python run_scripts/train_contrastive.py --seed 1 --dataset-name 'canopus_train_public' --compound-lib 'intpubchem' --splitter-name 'preset' --augment-data --augment-prob 0.5 --remove-prob 0.5 --remove-weights 'exp' --inten-prob 0.1 --frac-orig 0.2 --dist-name 'cosine' --contrastive-loss 'nce' --contrastive-decoy-pool 'mean' --contrastive-latent 'h0' --contrastive-weight 0.6 --contrastive-scale 16 --contrastive-bias 0.0 --num-decoys 64 --max-db-decoys 256 --decoy-norm-exp 4 --negative-strategy 'hardisomer_tani_pickled' --learning-rate 0.00057 --weight-decay 1e-07 --min-lr '5e-06' --scheduler --lr-decay-time 10000 --lr-decay-frac 0.7138 --patience 10 --max-epochs 500 --gpus 0 --batch-size 32 --num-workers 12 --cache-featurizers --ckpt-file 'results/model_train_demos/mist_fp_model/Fold_100_0/best.ckpt' --split-file 'data/paired_spectra/canopus_train_public/splits/canopus_hplus_100_0.csv' --save-dir 'contrast_model' --save-dir results/model_train_demos/contrast_model
 ```
 
 Once this model is trained, it can be used to extract contrastive embeddings

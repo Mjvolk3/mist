@@ -6,8 +6,8 @@ alidation
 """
 
 import subprocess
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 fp_model_dir = "results/2022_10_28_mist_csi_prospective/"
 contrastive_model_dir = "results/2022_10_30_contrastive_csi_prospective/"
@@ -32,36 +32,37 @@ for dataset_name in dataset_names:
     fp_folder.mkdir(exist_ok=True)
 
     # Step 1: predict fp's
-    base_script = f"python3 run_scripts/pred_fp.py --num-workers {num_workers} --gpu  --labels-name {labels_name} --dataset-name {dataset_name}"
+    base_script = f"python run_scripts/pred_fp.py --num-workers {num_workers} --gpu  --labels-name {labels_name} --dataset-name {dataset_name}"
     for ctr, ckpt_file in enumerate(Path(fp_model_dir).rglob("*.ckpt")):
-        out_folder  = fp_folder / f"model_{ctr}"
+        out_folder = fp_folder / f"model_{ctr}"
         out_folder.mkdir(exist_ok=True)
         cmd = f"{base_script} --model {ckpt_file} --save {out_folder}"
         print(cmd)
-        #subprocess.run(cmd, shell=True)
+        # subprocess.run(cmd, shell=True)
 
     # Step 2: Average fingerprints
     str_preds = " ".join([str(i) for i in fp_folder.glob("*/*.p")])
     merged_fp_save_name = fp_folder / "merged_fp_preds.p"
     cmd = f"python analysis/fp_preds/average_model_fp_preds.py --fp-files {str_preds} --save-name {merged_fp_save_name}"
-    #subprocess.run(cmd, shell=True)
-
+    # subprocess.run(cmd, shell=True)
 
     for retrieval_db in retrieval_dbs:
-        hdf_prefix= data_dir / f'retrieval_hdf/{retrieval_db}_with_morgan4096_retrieval_db'
+        hdf_prefix = (
+            data_dir / f"retrieval_hdf/{retrieval_db}_with_morgan4096_retrieval_db"
+        )
 
         save_dir = dataset_base / retrieval_db
         fp_retrieval_savedir = save_dir / "fp_retrieval"
         save_dir.mkdir(exist_ok=True)
         fp_retrieval_savedir.mkdir(exist_ok=True)
 
-        # Step 3: Run fp retrieval 
-        fp_cmd = f"python3 run_scripts/retrieval_fp.py --labels-file {labels_file} --dist-name cosine --num-workers {num_workers} --hdf-prefix  {hdf_prefix} --fp-pred-file {merged_fp_save_name} --save-dir {fp_retrieval_savedir}"
+        # Step 3: Run fp retrieval
+        fp_cmd = f"python run_scripts/retrieval_fp.py --labels-file {labels_file} --dist-name cosine --num-workers {num_workers} --hdf-prefix  {hdf_prefix} --fp-pred-file {merged_fp_save_name} --save-dir {fp_retrieval_savedir}"
         fp_out = list(Path(fp_retrieval_savedir).glob("*.p"))[0]
-        #fp_out = merged_fp_save_name
+        # fp_out = merged_fp_save_name
 
         # Replace with merged_fp_preds --> merged_fp_save_name
-        #subprocess.run(fp_cmd, shell=True)
+        # subprocess.run(fp_cmd, shell=True)
 
         # Step 4: Run contrastive retrieval
         contrast_retrieval_savedir = save_dir / "contrast_retrieval"
@@ -72,7 +73,7 @@ for dataset_name in dataset_names:
 
             contrast_cmd = f"python run_scripts/retrieval_contrastive.py --dataset-name {dataset_name} --num-workers {num_workers} --gpu --dist-name cosine --hdf-prefix {hdf_prefix} --model {ckpt_file} --save-dir {contrast_subdir} --labels-name {labels_name}"
             print(contrast_cmd)
-            #subprocess.run(contrast_cmd, shell=True)
+            # subprocess.run(contrast_cmd, shell=True)
 
         # Step 5: Merge contrastive files
         contrast_ret_files = contrast_retrieval_savedir.glob("*/*.p")
@@ -84,7 +85,7 @@ for dataset_name in dataset_names:
 
         # Step 6: Average contrastive files
         save_name = save_dir / "final_retrieval.p"
-        python_avg = f"python3 analysis/retrieval/avg_model_dists.py --first-ranking {fp_out} --second-ranking {contrast_out_file} --lam 0.3 --save-name {save_name}"
+        python_avg = f"python analysis/retrieval/avg_model_dists.py --first-ranking {fp_out} --second-ranking {contrast_out_file} --lam 0.3 --save-name {save_name}"
         print(python_avg)
         subprocess.run(python_avg, shell=True)
 

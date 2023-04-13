@@ -4,24 +4,23 @@ Create boxplot of fingerprints
 
 Example:
 
-python3 analysis/fp_preds/fp_boxplot.py --fp-pred-files data/paired_spectra/csi2022/prev_results/spectra_encoding_csi2022_Fold_0.p results/2022_08_22_mist_best_aug_lr/fp_preds_csi2022.p results/2022_08_22_ffn_binned/fp_preds_csi2022.p --model-names CSI:FingerID MIST FFN --save-name /Users/samgoldman/Desktop/fp_boxplot.png
+python analysis/fp_preds/fp_boxplot.py --fp-pred-files data/paired_spectra/csi2022/prev_results/spectra_encoding_csi2022_Fold_0.p results/2022_08_22_mist_best_aug_lr/fp_preds_csi2022.p results/2022_08_22_ffn_binned/fp_preds_csi2022.p --model-names CSI:FingerID MIST FFN --save-name /Users/samgoldman/Desktop/fp_boxplot.png
 
 """
 import argparse
-from pathlib import Path
 import pickle
 from functools import partial
-import pandas as pd
 from itertools import product
+from pathlib import Path
 
-import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
-
-import matplotlib.pyplot as plt
-import seaborn as sns
 import matplotlib as mpl
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
 from matplotlib.patches import Patch
 from matplotlib.ticker import FormatStrFormatter
+from sklearn.metrics.pairwise import cosine_similarity
 
 from mist import utils
 from mist.utils.plot_utils import *
@@ -170,7 +169,6 @@ def main():
     res_names = pred_names
     for (preds, targs), method_name in zip(res_pairs, res_names):
         for (metric, pool_method), metric_name in zip(metric_vals, metric_names):
-
             val_fn = get_metric(metric)
             res = val_fn(preds, targs)
 

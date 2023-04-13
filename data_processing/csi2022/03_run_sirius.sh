@@ -33,9 +33,9 @@ sirius_processing/sirius/bin/sirius --cores 30 --output  data/paired_spectra/csi
 
 conda activate ms-gen
 echo "Summarizing casmi"
-python3 $summarize_script  --labels-file  data/paired_spectra/casmi/labels.tsv --sirius-folder  data/paired_spectra/casmi/sirius_outputs
+python $summarize_script  --labels-file  data/paired_spectra/casmi/labels.tsv --sirius-folder  data/paired_spectra/casmi/sirius_outputs
 
 echo "Summarizing csi2022_debug"
-python3 $summarize_script  --labels-file  data/paired_spectra/csi2022_debug/labels.tsv --sirius-folder  data/paired_spectra/csi2022_debug/sirius_outputs
+python $summarize_script  --labels-file  data/paired_spectra/csi2022_debug/labels.tsv --sirius-folder  data/paired_spectra/csi2022_debug/sirius_outputs
 echo "Summarizing csi2022"
-python3 $summarize_script  --labels-file  data/paired_spectra/csi2022/labels.tsv --sirius-folder  data/paired_spectra/csi2022/sirius_outputs
+python $summarize_script  --labels-file  data/paired_spectra/csi2022/labels.tsv --sirius-folder  data/paired_spectra/csi2022/sirius_outputs
