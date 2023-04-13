@@ -9,13 +9,12 @@ from ast import literal_eval
 
 import numpy as np
 import pandas as pd
-
 from rdkit import Chem
 from rdkit.Chem import AllChem, DataStructs
 
 
 def get_magma_fingerprint(smile):
-    """ get_magma_fingerprint. """
+    """get_magma_fingerprint."""
     mol = Chem.MolFromSmiles(smile, sanitize=False)
     Chem.SanitizeMol(
         mol,
@@ -30,7 +29,7 @@ def get_magma_fingerprint(smile):
 
 
 def get_magma_fingerprint_bits(smile):
-    """ get magma fingerprint bits """
+    """get magma fingerprint bits"""
     fingerprint = get_magma_fingerprint(smile)
     hot_indices = list(np.where(np.array(list(fingerprint)) == 1)[0])
     return hot_indices
@@ -43,7 +42,6 @@ def read_magma_file(magma_frag_file):
         and os.path.exists(magma_frag_file)
         and os.path.getsize(magma_frag_file) > 0
     ):
-
         # correct for inconsistency by me in file parsing (sad)
         sep = "\t"
         spectra_df = pd.read_csv(magma_frag_file, index_col=0, sep=sep)
@@ -77,3 +75,7 @@ def _convert_str_to_list(df, column):
         lambda x: literal_eval(x) if x != "NAN" and not pd.isna(x) else []
     )
     return df
+
+
+if __name__ == "__main__":
+    pass

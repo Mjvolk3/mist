@@ -1,5 +1,6 @@
 """parallel_utils.py"""
 import logging
+
 from multiprocess.context import TimeoutError
 from pathos import multiprocessing as mp
 from tqdm import tqdm
@@ -99,3 +100,7 @@ def chunked_parallel(
     full_output = [j for i in list_outputs for j in i]
 
     return full_output
+
+
+if __name__ == "__main__":
+    pass

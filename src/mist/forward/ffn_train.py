@@ -3,22 +3,21 @@
 Train ffn to predict binned specs
 
 """
-import logging
-import yaml
-import json
 import argparse
+import json
+import logging
 from pathlib import Path
+
 import pandas as pd
-
-from torch.utils.data import DataLoader
-
 import pytorch_lightning as pl
+import yaml
 from pytorch_lightning import loggers as pl_loggers
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from pytorch_lightning.callbacks.model_checkpoint import ModelCheckpoint
+from torch.utils.data import DataLoader
 
 from mist import utils
-from mist.forward import ffn_data, ffn_model, splitter, fingerprint
+from mist.forward import ffn_data, ffn_model, fingerprint, splitter
 
 
 def add_forward_args(parser):
@@ -236,3 +235,7 @@ def train_model():
 
     with open(Path(save_dir) / "test_results.yaml", "w") as fp:
         fp.write(out_str)
+
+
+if __name__ == "__main__":
+    pass

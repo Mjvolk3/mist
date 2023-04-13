@@ -4,20 +4,22 @@ Accept input processed spectra and make subformula peak assignments
 accordingly.
 
 """
-import logging
-import h5py
-from pathlib import Path
-import numpy as np
-import pandas as pd
 import argparse
-from ast import literal_eval
+import logging
 import pickle
 import sys
+from ast import literal_eval
+from pathlib import Path
+
+import h5py
+import numpy as np
+import pandas as pd
+
+from mist.magma import magma_utils
+from mist.magma.fragmentation import FragmentEngine
 
 # Custom import
 from mist.utils import chunked_parallel
-from mist.magma.fragmentation import FragmentEngine
-from mist.magma import magma_utils
 
 # Define basic logger
 logging.basicConfig(
@@ -257,7 +259,7 @@ def magma_augmentation_sirius(
     spec_to_smiles,
     constrain_formula,
 ):
-    """ magma_augmentation_sirius. """
+    """magma_augmentation_sirius."""
     ms_file_name = spec_name_to_spec.get(spectra_name)
     save_filename = (Path(output_dir) / spectra_name).with_suffix(".magma")
 
@@ -324,7 +326,9 @@ def get_fingerprint_set(summary_df):
         fragment_labels_df = magma_utils._convert_str_to_list(
             fragment_labels_df, "chemical_formula"
         )
-        fragment_labels_df = magma_utils._convert_str_to_list(fragment_labels_df, "smiles")
+        fragment_labels_df = magma_utils._convert_str_to_list(
+            fragment_labels_df, "smiles"
+        )
 
         peaks_smiles = fragment_labels_df["smiles"].values
 

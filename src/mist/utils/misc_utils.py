@@ -1,19 +1,17 @@
 """misc_utils.py"""
-from pathlib import Path
-import sys
 import copy
 import logging
-from typing import List, Iterable, Iterator
+import sys
 from itertools import islice
+from pathlib import Path
+from typing import Iterable, Iterator, List
 
 import numpy as np
-import torch
-
-import yaml
 import pytorch_lightning as pl
-
-from pytorch_lightning.utilities.rank_zero import rank_zero_only
+import torch
+import yaml
 from pytorch_lightning.loggers.base import LightningLoggerBase, rank_zero_experiment
+from pytorch_lightning.utilities.rank_zero import rank_zero_only
 
 
 class ConsoleLogger(LightningLoggerBase):
@@ -43,7 +41,6 @@ class ConsoleLogger(LightningLoggerBase):
 
     @rank_zero_only
     def log_metrics(self, metrics, step):
-
         metrics = copy.deepcopy(metrics)
 
         epoch_num = "??"
@@ -146,7 +143,6 @@ def bin_spectra(
     bins = np.linspace(0, upper_limit, num=num_bins)
     binned_spec = np.zeros((len(spectras), len(bins)))
     for spec_index, spec in enumerate(spectras):
-
         # Convert to digitized spectra
         digitized_mz = np.digitize(spec[:, 0], bins=bins)
 
@@ -253,3 +249,7 @@ def reverse_packed_tensor(packed_tensor, lengths):
     bool_mask = indices < lengths.unsqueeze(1)
     output = packed_tensor[bool_mask]
     return output
+
+
+if __name__ == "__main__":
+    pass

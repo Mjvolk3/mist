@@ -3,19 +3,20 @@
 This serves as the entry point to embed specs using the contrastive model
 
 """
+import argparse
 import copy
-from pathlib import Path
 import logging
 import pickle
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import torch
-import argparse
 from tqdm import tqdm
 
-from mist.models import base
-from mist.data import datasets, featurizers
 from mist import utils
+from mist.data import datasets, featurizers
+from mist.models import base
 
 
 def get_args():
@@ -29,8 +30,9 @@ def get_args():
     )
     parser.add_argument("--labels-name", action="store", default="labels.tsv")
     parser.add_argument("--save-dir", required=False, default=None, help="Save dir")
-    parser.add_argument("--out-name", required=False, default=None,
-                        help="output name in save_dir")
+    parser.add_argument(
+        "--out-name", required=False, default=None, help="output name in save_dir"
+    )
     parser.add_argument(
         "--subset-datasets",
         action="store",
@@ -59,7 +61,7 @@ def embed_specs():
 
     # Load saved model
     model_ckpt = kwargs.get("model_ckpt")
-    pretrain_ckpt = torch.load(model_ckpt, map_location=torch.device('cpu'))
+    pretrain_ckpt = torch.load(model_ckpt, map_location=torch.device("cpu"))
     main_hparams = pretrain_ckpt["hyper_parameters"]
 
     # Set save dir and setup model
@@ -170,3 +172,7 @@ def embed_specs():
     # Output is new_entry
     with open(f_name, "wb") as fp:
         pickle.dump(new_entry, fp)
+
+
+if __name__ == "__main__":
+    pass

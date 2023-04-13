@@ -1,8 +1,9 @@
 """ splitter.py """
 
 import logging
-from typing import List, Tuple
 from pathlib import Path
+from typing import List, Tuple
+
 import numpy as np
 import pandas as pd
 
@@ -94,3 +95,7 @@ def random_split(names: List[str], split_sizes=(0.8, 0.1, 0.1)):
     val_smis = all_inds[first_ind:second_ind]
     test_smis = all_inds[second_ind:third_ind]
     return list(train_smis), list(val_smis), list(test_smis)
+
+
+if __name__ == "__main__":
+    pass

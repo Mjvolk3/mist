@@ -569,3 +569,7 @@ def add_train_args(parser):
     ta.add_argument("--cache-featurizers", action="store_true", default=False)
     ta.add_argument("--gradient-clip-val", type=int, default=5)
     return ta
+
+
+if __name__ == "__main__":
+    pass

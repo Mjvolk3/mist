@@ -3,29 +3,28 @@
 Hyperopt parameters
 
 """
-import os
+import argparse
 import copy
 import logging
-import yaml
-import argparse
+import os
 from pathlib import Path
-from typing import List, Dict
+from typing import Dict, List
 
-import torch
 import pytorch_lightning as pl
-
 import ray
+import torch
+import yaml
 from ray import tune
 from ray.air.config import RunConfig
+from ray.tune.schedulers.async_hyperband import ASHAScheduler
 from ray.tune.search import ConcurrencyLimiter
 from ray.tune.search.optuna import OptunaSearch
-from ray.tune.schedulers.async_hyperband import ASHAScheduler
+
+from mist import parsing, utils
+from mist.data import data_utils, datasets, featurizers, splitter
+from mist.models import contrastive_model
 
 # from ray.tune.integration.pytorch_lightning import TuneReportCallback
-
-from mist import utils, parsing
-from mist.models import contrastive_model
-from mist.data import datasets, splitter, featurizers, data_utils
 
 
 def score_function(config, base_args, orig_dir=""):
@@ -244,3 +243,7 @@ def run_hyperopt():
     results.get_dataframe().to_csv(
         Path(save_dir) / "full_res_tbl.tsv", sep="\t", index=None
     )
+
+
+if __name__ == "__main__":
+    pass

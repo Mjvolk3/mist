@@ -8,14 +8,15 @@ import logging
 from typing import List, Optional
 
 import numpy as np
-import torch
 import pytorch_lightning as pl
+import torch
 from pytorch_lightning import loggers as pl_loggers
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from pytorch_lightning.callbacks.lr_monitor import LearningRateMonitor
 from pytorch_lightning.callbacks.model_checkpoint import ModelCheckpoint
-from mist.data.datasets import SpectraMolDataset, SpecDataModule
+
 from mist import utils
+from mist.data.datasets import SpecDataModule, SpectraMolDataset
 
 # Define model_types
 model_registry = {}
@@ -222,7 +223,6 @@ class TorchModel(pl.LightningModule):
         self.load_state_dict(loaded_checkpoint["state_dict"])
 
     def load_from_ckpt(self, ckpt_file, **kwargs):
-
         loaded_checkpoint = torch.load(ckpt_file)
         best_epoch = loaded_checkpoint["epoch"]
 
@@ -338,3 +338,7 @@ class TorchModel(pl.LightningModule):
         # Turn on eval mode
         self.eval()
         return test_losses
+
+
+if __name__ == "__main__":
+    pass

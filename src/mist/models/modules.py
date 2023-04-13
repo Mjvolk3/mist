@@ -1,7 +1,8 @@
 """ modules.py"""
 import copy
-import torch
+
 import numpy as np
+import torch
 from torch import nn
 
 from mist import utils
@@ -364,3 +365,7 @@ class FPGrowingModule(nn.Module):
 
 def _get_clones(module, N):
     return nn.ModuleList([copy.deepcopy(module) for i in range(N)])
+
+
+if __name__ == "__main__":
+    pass

@@ -1,16 +1,16 @@
 """chem_utils.py"""
 
 import re
-import numpy as np
-import pandas as pd
 from functools import reduce
 
+import numpy as np
+import pandas as pd
 import torch
 from rdkit import Chem
 from rdkit.Chem import Atom
-from rdkit.Chem.rdMolDescriptors import CalcMolFormula
-from rdkit.Chem.MolStandardize import rdMolStandardize
 from rdkit.Chem.Descriptors import ExactMolWt
+from rdkit.Chem.MolStandardize import rdMolStandardize
+from rdkit.Chem.rdMolDescriptors import CalcMolFormula
 
 CHEM_FORMULA_SIZE = "([A-Z][a-z]*)([0-9]*)"
 
@@ -65,7 +65,7 @@ element_to_position_mass = dict(zip(VALID_ELEMENTS, ELEMENT_VECTORS_MASS))
 
 def has_valid_els(chem_formula: str) -> bool:
     """has_valid_els"""
-    for (chem_symbol, num) in re.findall(CHEM_FORMULA_SIZE, chem_formula):
+    for chem_symbol, num in re.findall(CHEM_FORMULA_SIZE, chem_formula):
         if chem_symbol not in VALID_ELEMENTS:
             return False
     return True
@@ -81,7 +81,7 @@ def formula_to_dense(chem_formula: str) -> np.ndarray:
 
     """
     total_onehot = []
-    for (chem_symbol, num) in re.findall(CHEM_FORMULA_SIZE, chem_formula):
+    for chem_symbol, num in re.findall(CHEM_FORMULA_SIZE, chem_formula):
         # Convert num to int
         num = 1 if num == "" else int(num)
         one_hot = element_to_position[chem_symbol].reshape(1, -1)
@@ -137,7 +137,7 @@ def formula_to_dense_mass(chem_formula: str) -> np.ndarray:
 
     """
     total_onehot = []
-    for (chem_symbol, num) in re.findall(CHEM_FORMULA_SIZE, chem_formula):
+    for chem_symbol, num in re.findall(CHEM_FORMULA_SIZE, chem_formula):
         # Convert num to int
         num = 1 if num == "" else int(num)
         one_hot = element_to_position_mass[chem_symbol].reshape(1, -1)
@@ -173,7 +173,7 @@ def formula_to_dense_mass_norm(chem_formula: str) -> np.ndarray:
 def formula_mass(chem_formula: str) -> float:
     """get formula mass"""
     mass = 0
-    for (chem_symbol, num) in re.findall(CHEM_FORMULA_SIZE, chem_formula):
+    for chem_symbol, num in re.findall(CHEM_FORMULA_SIZE, chem_formula):
         # Convert num to int
         num = 1 if num == "" else int(num)
         mass += ELEMENT_TO_MASS[chem_symbol] * num
@@ -361,7 +361,7 @@ class SmilesStandardizer(object):
 
 
 def achiral_smi(smi: str) -> str:
-    """ achiral_smi. 
+    """achiral_smi.
 
     Return:
         isomeric smiles
@@ -395,3 +395,7 @@ def npclassifer_query(inputs):
     out.raise_for_status()
     out_json = out.json()
     return {spec: out_json}
+
+
+if __name__ == "__main__":
+    pass

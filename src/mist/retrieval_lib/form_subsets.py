@@ -4,11 +4,12 @@ Map a compound list of smiles strings to a set of formulae.
 
 """
 
-from typing import List, Tuple
 import pickle
 from collections import defaultdict
-from tqdm import tqdm
+from typing import List, Tuple
+
 from rdkit import Chem
+from tqdm import tqdm
 
 import mist.utils as utils
 
@@ -58,7 +59,7 @@ def single_form_from_smi(smi: str) -> Tuple[str, Tuple[str, str]]:
 
 
 def build_form_map(smi_file, dump_file=None, debug=False):
-    """ build_form_map. """
+    """build_form_map."""
     smi_list = read_smi_txt(smi_file, debug=debug)
     form_to_mols = calc_formula_to_moltuples(smi_list)
 
@@ -67,3 +68,7 @@ def build_form_map(smi_file, dump_file=None, debug=False):
             pickle.dump(form_to_mols, f)
 
     return form_to_mols
+
+
+if __name__ == "__main__":
+    pass

@@ -1,11 +1,12 @@
 """ binned_ffn_model.py"""
-from typing import Optional, List, Tuple
+from typing import List, Optional, Tuple
+
 import torch
 import torch.nn as nn
 
 from mist.data import featurizers
-from mist.models.base import TorchModel, register_model
 from mist.models import modules
+from mist.models.base import TorchModel, register_model
 
 
 @register_model
@@ -138,7 +139,6 @@ class FingerIDFFN(TorchModel):
         return loss_dict
 
     def compute_loss(self, pred_fp, target_fp, train_step=True, **kwargs):
-
         # Compute weight of loss function
         fp_loss, iterative_loss = None, None
 
@@ -176,3 +176,7 @@ class FingerIDFFN(TorchModel):
 
         """
         return batch["mols"], {}
+
+
+if __name__ == "__main__":
+    pass

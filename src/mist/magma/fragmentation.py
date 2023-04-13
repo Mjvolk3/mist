@@ -372,3 +372,7 @@ def fragment2smiles(mol, atomlist):
             emol.RemoveAtom(atom)
     frag = emol.GetMol()
     return Chem.MolToSmiles(frag)
+
+
+if __name__ == "__main__":
+    pass

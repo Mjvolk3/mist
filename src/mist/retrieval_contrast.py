@@ -3,20 +3,21 @@
 This serves as the entry point to evaluate mass spec retrieval model
 
 """
+import argparse
 import copy
-from pathlib import Path
 import logging
 import pickle
+from pathlib import Path
+
+import h5py
 import numpy as np
 import pandas as pd
 import torch
-import argparse
-import h5py
 from tqdm import tqdm
 
-from mist.models import base
-from mist.data import datasets, featurizers
 from mist import utils
+from mist.data import datasets, featurizers
+from mist.models import base
 
 
 def get_args():
@@ -29,8 +30,7 @@ def get_args():
         help="Name of test dataset",
     )
     parser.add_argument("--save-dir", required=False, default=None, help="Save dir")
-    parser.add_argument("--out-name", required=False, default=None,
-                        help="Save name")
+    parser.add_argument("--out-name", required=False, default=None, help="Save name")
     parser.add_argument(
         "--hdf-prefix",
         help="HDF Prefix to use for querying retrieval.",
@@ -253,13 +253,12 @@ def run_contrastive_retrieval():
         logging.info("Extracting fingerprint  for batch of size 1000")
         num_workers = kwargs.get("num_workers")
         if num_workers == 0:
-            fps_from_hdf = [get_decoy_fps(form_temp) for form_temp in formula_dicts_temp]
+            fps_from_hdf = [
+                get_decoy_fps(form_temp) for form_temp in formula_dicts_temp
+            ]
         else:
             fps_from_hdf = utils.chunked_parallel(
-                formula_dicts_temp,
-                get_decoy_fps,
-                chunks=100,
-                max_cpu=num_workers
+                formula_dicts_temp, get_decoy_fps, chunks=100, max_cpu=num_workers
             )
 
         # Encode all hdf fp's with single model
@@ -324,7 +323,7 @@ def run_contrastive_retrieval():
 
     # Dump to output file
     ctr = 0
-    save_name = kwargs.get('out_name', None)
+    save_name = kwargs.get("out_name", None)
     if save_name is not None:
         f_name = Path(save_dir) / save_name
     else:
@@ -342,3 +341,7 @@ def run_contrastive_retrieval():
     # Output is new_entry
     with open(f_name, "wb") as fp:
         pickle.dump(new_entry, fp)
+
+
+if __name__ == "__main__":
+    pass

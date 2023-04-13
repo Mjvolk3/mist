@@ -1,4 +1,4 @@
-from . import base
-from . import mist_model
-from . import binned_ffn_model
-from . import contrastive_model
+from . import base, binned_ffn_model, contrastive_model, mist_model
+
+if __name__ == "__main__":
+    pass

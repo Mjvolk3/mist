@@ -1,11 +1,12 @@
 """splitter.py"""
 
-from typing import List, Tuple, Iterator
 import logging
-import pandas as pd
-import numpy as np
+from typing import Iterator, List, Tuple
 
-from mist.data.data import Spectra, Mol
+import numpy as np
+import pandas as pd
+
+from mist.data.data import Mol, Spectra
 
 DATASET = List[Tuple[Spectra, Mol]]
 
@@ -17,7 +18,10 @@ def get_splitter(splitter_name: str, **kwargs):
         splitter_name (str): splitter_name
         kwargs:
     """
-    return {"random": RandomSpectraSplitter, "preset": PresetSpectraSplitter,}[
+    return {
+        "random": RandomSpectraSplitter,
+        "preset": PresetSpectraSplitter,
+    }[
         splitter_name
     ](**kwargs)
 
@@ -226,3 +230,7 @@ class PresetSpectraSplitter(SpectraSplitter):
                 full_dataset, train_inds, val_inds, test_inds
             )
             return (fold_name, new_split)
+
+
+if __name__ == "__main__":
+    pass

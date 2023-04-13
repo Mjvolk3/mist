@@ -1,13 +1,14 @@
 """ contrastive_model.py
 """
 import copy
-from typing import Optional, List, Tuple
-import torch
-from torch import nn
-import torch.nn.functional as F
+from typing import List, Optional, Tuple
 
-from mist.models.base import TorchModel, register_model, build_model
+import torch
+import torch.nn.functional as F
+from torch import nn
+
 from mist import utils
+from mist.models.base import TorchModel, build_model, register_model
 
 
 @register_model
@@ -159,7 +160,6 @@ class ContrastiveModel(TorchModel):
             return 0
 
         elif self.contrastive_loss == "triplet_rand":
-
             mol_indices = batch["mol_indices"]
             spec_indices = batch["spec_indices"]
 
@@ -588,3 +588,7 @@ class ContrastiveModel(TorchModel):
     def dataset_type(mode: Optional[str] = None) -> str:
         """dataset_type."""
         return "contrastive_hdf"
+
+
+if __name__ == "__main__":
+    pass

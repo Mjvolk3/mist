@@ -1,10 +1,11 @@
 """ffn_model.py"""
-import torch
+import copy
+
+import numpy as np
 import pytorch_lightning as pl
+import torch
 import torch.nn as nn
 from torch.nn import functional as F
-import numpy as np
-import copy
 
 
 def get_clones(module, N):
@@ -178,7 +179,6 @@ class ForwardFFN(pl.LightningModule):
 
         output = self.output_layer(output)
         if self.growing == "none":
-
             # Get indices where it makes sense to predict a mass
             full_arange = torch.arange(self.output_dim, device=output.device)
             is_valid = full_arange[None, :] <= full_mass_bin[:, None]
@@ -237,7 +237,6 @@ class ForwardFFN(pl.LightningModule):
 
                 outputs = []
                 for output_step in output:
-
                     # Get indices where it makes sense to predict a mass
                     temp_output_shape = output_step.shape[-1]
                     if self.use_reverse:
@@ -289,7 +288,6 @@ class ForwardFFN(pl.LightningModule):
         # Modified
         pred_spec = self.forward(batch["fps"], batch["full_weight"], training=True)
         if self.growing == "iterative":
-
             # Compute iterative loss
             int_preds = pred_spec[::-1]
             orig_targ, cur_targ = batch["spectra"], batch["spectra"]
@@ -462,7 +460,6 @@ class GrowingModule(nn.Module):
         predict_bricks = []
         gate_bricks = []
         for layer_dim_ind, layer_dim in enumerate(layer_dims[:-1]):
-
             out_dim = layer_dims[layer_dim_ind + 1]
 
             if scheme == "ffn_grow":
@@ -507,3 +504,7 @@ class GrowingModule(nn.Module):
 
             output_preds.append(cur_pred)
         return output_preds
+
+
+if __name__ == "__main__":
+    pass

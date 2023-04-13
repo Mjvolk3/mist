@@ -3,17 +3,18 @@
 Train a contrastive model
 
 """
-import yaml
+import argparse
 import copy
 import logging
 import pickle
 from pathlib import Path
-import argparse
-import torch
 
-from mist import utils, parsing
+import torch
+import yaml
+
+from mist import parsing, utils
+from mist.data import data_utils, datasets, featurizers, splitter
 from mist.models import contrastive_model
-from mist.data import datasets, splitter, featurizers, data_utils
 
 
 def get_args():
@@ -125,3 +126,7 @@ def run_training():
     output_str = yaml.dump(output_dict, indent=2, default_flow_style=False)
     with open(save_dir / "results.yaml", "w") as fp:
         fp.write(output_str)
+
+
+if __name__ == "__main__":
+    pass

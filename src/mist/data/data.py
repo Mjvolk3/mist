@@ -1,10 +1,11 @@
 """ data.py """
 import logging
-from typing import Optional
 import re
+from typing import Optional
 
 from rdkit import Chem
 from rdkit.Chem import Descriptors
+
 from mist import utils
 
 
@@ -199,3 +200,7 @@ class Mol(object):
 
     def get_rdkit_mol(self) -> Chem.Mol:
         return self.mol
+
+
+if __name__ == "__main__":
+    pass

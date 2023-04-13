@@ -1,12 +1,12 @@
 import logging
+
 import numpy as np
 import pandas as pd
-
+import torch
 from rdkit import Chem
 from rdkit.Chem.Descriptors import MolWt
-
-import torch
 from torch.utils.data.dataset import Dataset
+
 from mist import utils
 
 
@@ -287,3 +287,7 @@ class MolDataset(Dataset):
             "full_weight": full_weight,
         }
         return return_dict
+
+
+if __name__ == "__main__":
+    pass

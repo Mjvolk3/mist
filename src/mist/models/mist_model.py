@@ -1,13 +1,14 @@
 """ mist_model.py
 """
-from typing import Optional, List, Tuple
+from typing import List, Optional, Tuple
+
 import torch
-from torch import nn
 import torch.nn.functional as F
+from torch import nn
 
 from mist.data import featurizers
-from mist.models.base import TorchModel, register_model
 from mist.models import modules
+from mist.models.base import TorchModel, register_model
 
 
 @register_model
@@ -186,7 +187,6 @@ class MistNet(TorchModel):
         if self.iterative_preds == "none":
             pass
         elif self.iterative_preds in ["growing"]:
-
             cur_targ = target_fp
             if self.shuffle_train:
                 cur_targ = cur_targ[:, self.rand_ordering]
@@ -194,7 +194,6 @@ class MistNet(TorchModel):
             int_preds = aux_outputs_spec["int_preds"][::-1]
             aux_loss = None
             for int_pred in int_preds:
-
                 targ_shape = int_pred.shape[-1]
 
                 # Find bits where
@@ -437,3 +436,7 @@ class MistNet(TorchModel):
         else:
             raise NotImplementedError()
         return output, aux_outputs
+
+
+if __name__ == "__main__":
+    pass

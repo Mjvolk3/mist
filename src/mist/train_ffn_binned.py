@@ -3,15 +3,16 @@
 Train a feed forward network on binned spec data
 
 """
-import yaml
+import argparse
 import logging
 import pickle
 from pathlib import Path
-import argparse
 
+import yaml
+
+from mist import parsing, utils
+from mist.data import datasets, featurizers, splitter
 from mist.models import binned_ffn_model
-from mist.data import datasets, splitter, featurizers
-from mist import utils, parsing
 
 
 def get_args():
@@ -99,3 +100,7 @@ def run_training():
     output_str = yaml.dump(output_dict, indent=2, default_flow_style=False)
     with open(save_dir / "results.yaml", "w") as fp:
         fp.write(output_str)
+
+
+if __name__ == "__main__":
+    pass

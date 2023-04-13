@@ -3,19 +3,20 @@
 Embed smiles strings using a contrastive model
 
 """
+import argparse
 import copy
-from pathlib import Path
 import logging
 import pickle
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import torch
-import argparse
 from tqdm import tqdm
 
-from mist.models import base
-from mist.data import featurizers, data
 from mist import utils
+from mist.data import data, featurizers
+from mist.models import base
 
 
 def get_args():
@@ -45,7 +46,7 @@ def embed_smis():
 
     # Load saved model
     model_ckpt = kwargs.get("model_ckpt")
-    pretrain_ckpt = torch.load(model_ckpt, map_location=torch.device('cpu'))
+    pretrain_ckpt = torch.load(model_ckpt, map_location=torch.device("cpu"))
     main_hparams = pretrain_ckpt["hyper_parameters"]
 
     # Set save dir and setup model
@@ -119,3 +120,7 @@ def embed_smis():
     # Output is new_entry
     with open(f_name, "wb") as fp:
         pickle.dump(output, fp)
+
+
+if __name__ == "__main__":
+    pass

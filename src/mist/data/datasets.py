@@ -1,22 +1,22 @@
 """ datasets.py
 """
-from pathlib import Path
-import pickle
-import h5py
 import logging
+import pickle
 from functools import partial
-from typing import Optional, List, Tuple, Set, Callable
+from pathlib import Path
+from typing import Callable, List, Optional, Set, Tuple
+
+import h5py
 import numpy as np
 import pandas as pd
-
-import torch
 import pytorch_lightning as pl
-from torch.utils.data.dataset import Dataset
+import torch
 from torch.utils.data import DataLoader
+from torch.utils.data.dataset import Dataset
 from tqdm import tqdm
 
-from mist.data import featurizers, data_utils
-from mist.data.data import Spectra, Mol
+from mist.data import data_utils, featurizers
+from mist.data.data import Mol, Spectra
 
 
 def get_paired_spectra(
@@ -504,7 +504,6 @@ class SpectraMolMismatchHDFDataset(SpectraMolDataset):
             # Draw FPs from isomers weighted by tani similarity to targ
             # Check for forward upsample
             if exclude_idx >= self.orig_len and self.add_forward_specs:
-
                 true_mol_form = mol.get_inchikey()
                 inds, weights = self.aux_inds[true_mol_form]
                 fp_examples = self.aux_fps[inds]
@@ -850,3 +849,7 @@ class SpecDataModule(pl.LightningDataModule):
             num_workers=self.num_workers,
             persistent_workers=self.persistent_workers,
         )
+
+
+if __name__ == "__main__":
+    pass

@@ -4,17 +4,16 @@ Make a retrieval hdf5 dataset. Takes in the pickled form_to_smiles object and
 makes hdf5 for a given fingerprint type
 """
 
-from pathlib import Path
-from functools import partial
-import h5py
 import pickle
+from functools import partial
+from pathlib import Path
+
+import h5py
 import numpy as np
-
 import pandas as pd
-
+from pathos import multiprocessing as mp
 from tqdm import tqdm
 
-from pathos import multiprocessing as mp
 from mist import utils
 from mist.data import featurizers
 
@@ -23,10 +22,15 @@ cpus = mp.cpu_count()
 CHUNKSIZE = 1024
 
 
-def make_retrieval_hdf5(dataset_name: str, labels_name: str,
-                        form_to_smi: dict, database_name="inthmdb",
-                        fp_names: list = ["morgan4096"], debug: bool = False):
-    """ make_retrieval_hdf5. 
+def make_retrieval_hdf5(
+    dataset_name: str,
+    labels_name: str,
+    form_to_smi: dict,
+    database_name="inthmdb",
+    fp_names: list = ["morgan4096"],
+    debug: bool = False,
+):
+    """make_retrieval_hdf5.
 
     Args:
         dataset_name (str): dataset
@@ -44,10 +48,11 @@ def make_retrieval_hdf5(dataset_name: str, labels_name: str,
     fp_names_str = "-".join(fp_names)
     output_dir = data_dir / "retrieval_hdf"
     output_dir.mkdir(exist_ok=True)
-    index_file = output_dir / f"{database_name}_with_{fp_names_str}_retrieval_db_index.p"
+    index_file = (
+        output_dir / f"{database_name}_with_{fp_names_str}_retrieval_db_index.p"
+    )
     name_file = output_dir / f"{database_name}_with_{fp_names_str}_retrieval_db_names.p"
     hdf_file = output_dir / f"{database_name}_with_{fp_names_str}_retrieval_db.hdf5"
-
 
     data_df = pd.read_csv(data_dir / labels_name, sep="\t")
     key = "formula"
@@ -80,7 +85,6 @@ def make_retrieval_hdf5(dataset_name: str, labels_name: str,
     # Batch formulae
     # Get batches of 1000
     for form_batch in tqdm(utils.batches(formulae, 1000)):
-
         # Fingerprint in big batch
         all_smis = [j[0] for i in form_batch for j in form_to_smi.get(i, [])]
         fingerprinted_smiles = utils.chunked_parallel(all_smis, fingerprint_smi)
@@ -90,7 +94,7 @@ def make_retrieval_hdf5(dataset_name: str, labels_name: str,
             # set of tuples of smiles, inchikeys
             tuple_list = list(form_to_smi.get(form, []))
             new_smis = [i[0] for i in tuple_list]
-            #new_ikeys = [i[1] for i in tuple_list]
+            # new_ikeys = [i[1] for i in tuple_list]
             new_len = len(tuple_list)
 
             if len(tuple_list) == 0:
@@ -98,7 +102,7 @@ def make_retrieval_hdf5(dataset_name: str, labels_name: str,
 
             fingerprinted_smiles = [smi_to_fp[j] for j in new_smis]
             fingerprint_batch = np.vstack(fingerprinted_smiles)
-            fps_dset[cur_ind: cur_ind + new_len] = fingerprint_batch
+            fps_dset[cur_ind : cur_ind + new_len] = fingerprint_batch
 
             new_ind_dict[form] = {"offset": cur_ind, "length": new_len}
             ind_to_smi = dict(zip(np.arange(cur_ind, cur_ind + new_len), new_smis))
@@ -114,9 +118,15 @@ def make_retrieval_hdf5(dataset_name: str, labels_name: str,
     with open(name_file, "wb") as fp:
         pickle.dump(new_name_dict, fp)
 
-def make_retrieval_hdf5_file(dataset_name: str, labels_name: str,
-                             form_to_smi_file: str, database_name="inthmdb",
-                             fp_names: list = ["morgan4096"], debug: bool = False):
+
+def make_retrieval_hdf5_file(
+    dataset_name: str,
+    labels_name: str,
+    form_to_smi_file: str,
+    database_name="inthmdb",
+    fp_names: list = ["morgan4096"],
+    debug: bool = False,
+):
     """make_retrieval_hdf5_file.
 
     Makes hdf5 retrieval accepting form_to_smi_file instead of form_to_smi
@@ -131,21 +141,29 @@ def make_retrieval_hdf5_file(dataset_name: str, labels_name: str,
         debug (bool): debug flag
     """
 
-
     # Load in pickled mapping
     print("Loading in pickled formula map")
     with open(form_to_smi_file, "rb") as f:
         form_to_smi = pickle.load(f)
     print("Done loading in pickled formula map")
-    make_retrieval_hdf5(dataset_name=dataset_name, labels_name=labels_name,
-                        form_to_smi=form_to_smi, database_name=database_name,
-                        fp_names=fp_names, debug=debug)
+    make_retrieval_hdf5(
+        dataset_name=dataset_name,
+        labels_name=labels_name,
+        form_to_smi=form_to_smi,
+        database_name=database_name,
+        fp_names=fp_names,
+        debug=debug,
+    )
 
 
-def make_ranking_file(dataset_name: str, hdf_prefix: str,
-                      labels_name: str = "labels.tsv",
-                      fp_names: list = ["morgan4096"], debug: bool = False,
-                      num_workers=20,):
+def make_ranking_file(
+    dataset_name: str,
+    hdf_prefix: str,
+    labels_name: str = "labels.tsv",
+    fp_names: list = ["morgan4096"],
+    debug: bool = False,
+    num_workers=20,
+):
     """make_ranking_file.
 
     Makes hdf5 ranking file that maps each name to its true index in the hdf5
@@ -348,9 +366,13 @@ def make_ranking_file(dataset_name: str, hdf_prefix: str,
         pickle.dump(out_dict, fp)
 
 
-def subsample_with_weights(hdf_prefix: str, labels_file: str,
-                           fp_names: list = ["morgan4096"],
-                           debug: bool = False, num_workers=20,):
+def subsample_with_weights(
+    hdf_prefix: str,
+    labels_file: str,
+    fp_names: list = ["morgan4096"],
+    debug: bool = False,
+    num_workers=20,
+):
     """subsample_with_weights.
 
     The full pubchem dataset we export is extremely large; create a subset and
@@ -394,7 +416,8 @@ def subsample_with_weights(hdf_prefix: str, labels_file: str,
 
     featurizer = featurizers.FingerprintFeaturizer(fp_names=fp_names)
     search_tuple = [
-        (k, featurizer.featurize_smiles(ikey_to_smi[k])) for k in inchikey_to_formula.keys()
+        (k, featurizer.featurize_smiles(ikey_to_smi[k]))
+        for k in inchikey_to_formula.keys()
     ]
 
     # 3. Load in pickle_inds and pubchem inds
@@ -454,7 +477,6 @@ def subsample_with_weights(hdf_prefix: str, labels_file: str,
         sim_k = sim[top_k_inds]
         top_k_inds = np.array(top_k_inds) + offset
         return (top_k_inds, sim_k)
-
 
     # Goal is to construct a list of all indices to pull and all their tani
     # weights
@@ -529,7 +551,9 @@ def subsample_with_weights(hdf_prefix: str, labels_file: str,
             print(f"New database len: {cur_ind}")
 
             # Copy from old ind to new ind
-            for copy_batch in tqdm(list(utils.batches(ind_pairs, CHUNKSIZE * READ_FACTOR))):
+            for copy_batch in tqdm(
+                list(utils.batches(ind_pairs, CHUNKSIZE * READ_FACTOR))
+            ):
                 prev_inds, new_inds = zip(*copy_batch)
                 new_inds = np.array(new_inds)
                 prev_inds = np.array(prev_inds)
@@ -550,3 +574,7 @@ def subsample_with_weights(hdf_prefix: str, labels_file: str,
             print(f"Output fps total: {cur_ind}")
             with open(output_p, "wb") as fp:
                 pickle.dump(new_ind_dict, fp)
+
+
+if __name__ == "__main__":
+    pass

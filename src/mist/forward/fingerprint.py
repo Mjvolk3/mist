@@ -1,13 +1,13 @@
 """fingerprint.py """
 
-import numpy as np
-from pathlib import Path
 import pickle
-import h5py
+from pathlib import Path
 
+import h5py
+import numpy as np
 from rdkit import Chem
-from rdkit.Chem.Descriptors import MolWt
 from rdkit.Chem import AllChem, DataStructs
+from rdkit.Chem.Descriptors import MolWt
 
 from mist import utils
 
@@ -69,7 +69,6 @@ class Fingerprinter:
             raise NotImplementedError()
 
     def get_fp(self, mol: Chem.Mol) -> np.ndarray:
-
         if mol is None:
             return None
 
@@ -116,7 +115,6 @@ class Fingerprinter:
             raise NotImplementedError()
 
     def get_fp_weight(self, mol: Chem.Mol) -> (int, np.ndarray):
-
         if mol is None:
             return None, None
         weight = MolWt(mol)
@@ -168,3 +166,7 @@ class Fingerprinter:
 
     def get_fp_smi_wt(self, smi: str) -> np.ndarray:
         return self.get_fp_weight(Chem.MolFromSmiles(smi))
+
+
+if __name__ == "__main__":
+    pass

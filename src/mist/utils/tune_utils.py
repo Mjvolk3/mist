@@ -1,10 +1,9 @@
 import logging
 from typing import Dict, List, Optional, Union
 
-from pytorch_lightning import Trainer, LightningModule
-from ray.tune.integration.pytorch_lightning import TuneCallback
-
+from pytorch_lightning import LightningModule, Trainer
 from ray import tune
+from ray.tune.integration.pytorch_lightning import TuneCallback
 
 logger = logging.getLogger(__name__)
 
@@ -93,3 +92,7 @@ class TuneReportCallback(TuneCallback):
         report_dict = self._get_report_dict(trainer, pl_module)
         if report_dict is not None:
             tune.report(**report_dict)
+
+
+if __name__ == "__main__":
+    pass

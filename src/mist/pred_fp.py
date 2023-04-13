@@ -3,16 +3,17 @@
 Predict fingerprints from spectra with a set of known models
 
 """
-from pathlib import Path
+import argparse
 import logging
 import pickle
+from pathlib import Path
+
 import pandas as pd
 import torch
-import argparse
 
-from mist.models import base
-from mist.data import datasets, featurizers
 from mist import utils
+from mist.data import datasets, featurizers
+from mist.models import base
 
 
 def get_args():
@@ -67,7 +68,7 @@ def run_fp_pred():
     model_ckpt = kwargs.get("model_ckpt")
 
     # Build model
-    pretrain_ckpt = torch.load(model_ckpt, map_location=torch.device('cpu'))
+    pretrain_ckpt = torch.load(model_ckpt, map_location=torch.device("cpu"))
     main_hparams = pretrain_ckpt["hyper_parameters"]
 
     # Replace save_dir in kwargs if it's None with the model's
@@ -164,3 +165,7 @@ def run_fp_pred():
     save_loc = Path(save_dir).joinpath(results_name)
     with open(save_loc, "wb") as fp:
         pickle.dump(result_export, fp)
+
+
+if __name__ == "__main__":
+    pass

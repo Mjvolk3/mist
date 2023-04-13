@@ -1,10 +1,10 @@
 """ parse_utils.py """
-from pathlib import Path
-from typing import Tuple, List, Optional
 from itertools import groupby
+from pathlib import Path
+from typing import List, Optional, Tuple
 
-from tqdm import tqdm
 import numpy as np
+from tqdm import tqdm
 
 
 def parse_spectra(spectra_file: str) -> Tuple[dict, List[Tuple[str, np.ndarray]]]:
@@ -156,8 +156,7 @@ def parse_spectra_msp(
     key = lambda x: x.strip().startswith("PEPMASS")
     parsed_spectra = []
     with open(mgf_file, "r", encoding="utf-8") as fp:
-        for (is_header, group) in tqdm(groupby(fp, key)):
-
+        for is_header, group in tqdm(groupby(fp, key)):
             if is_header:
                 continue
             meta = dict()
@@ -210,9 +209,7 @@ def parse_spectra_mgf(
     key = lambda x: x.strip() == "BEGIN IONS"
     parsed_spectra = []
     with open(mgf_file, "r") as fp:
-
-        for (is_header, group) in tqdm(groupby(fp, key)):
-
+        for is_header, group in tqdm(groupby(fp, key)):
             if is_header:
                 continue
 
@@ -275,3 +272,7 @@ def parse_tsv_spectra(spectra_file: str) -> List[Tuple[str, np.ndarray]]:
     output_spec = np.array(output_spec)
     return_obj = [("sirius_spec", output_spec)]
     return return_obj
+
+
+if __name__ == "__main__":
+    pass

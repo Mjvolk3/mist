@@ -4,14 +4,13 @@ Hold pairwise attention enabled transformers
 
 """
 import math
-from typing import Optional, Union, Callable, Tuple
+from typing import Callable, Optional, Tuple, Union
 
 import torch
 from torch import Tensor
+from torch.nn import Dropout, LayerNorm, Linear, Module, Parameter
 from torch.nn import functional as F
-from torch.nn import Module, LayerNorm, Linear, Dropout, Parameter
-from torch.nn.init import xavier_uniform_, constant_
-
+from torch.nn.init import constant_, xavier_uniform_
 from torch.nn.modules.linear import NonDynamicallyQuantizableLinear
 
 
@@ -135,7 +134,6 @@ class TransformerEncoderLayer(Module):
         pairwise_features: Optional[Tensor],
         key_padding_mask: Optional[Tensor],
     ) -> Tensor:
-
         ## Apply joint featurizer
         x = self.self_attn(
             x,
@@ -638,3 +636,7 @@ class MultiheadAttention(Module):
         # (B, Nt, Ns) x (B, Ns, E) -> (B, Nt, E)
         output = torch.bmm(attn, v)
         return output, attn
+
+
+if __name__ == "__main__":
+    pass

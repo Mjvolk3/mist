@@ -4,18 +4,17 @@ Make predictions with trained model
 
 """
 
-import logging
-import yaml
 import argparse
+import logging
 import pickle
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
-
-import torch
-from torch.utils.data import DataLoader
 import pytorch_lightning as pl
+import torch
+import yaml
+from torch.utils.data import DataLoader
 
 from mist import utils
 from mist.forward import ffn_data, ffn_model, fingerprint
@@ -134,3 +133,7 @@ def predict():
 
         with open(kwargs["save_name"], "wb") as fp:
             pickle.dump(output, fp)
+
+
+if __name__ == "__main__":
+    pass

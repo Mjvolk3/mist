@@ -4,31 +4,32 @@ featurizers.py
 Hold featurizers & collate fns for various spectra and molecules in a single
 file
 """
-from pathlib import Path
+import json
 import logging
 import pickle
 from abc import ABC, abstractmethod
-from typing import List, Dict, Callable
+from pathlib import Path
+from typing import Callable, Dict, List
 
 import h5py
-
-import json
-import pandas as pd
 import numpy as np
+import pandas as pd
 import torch
-
 from rdkit.Chem import AllChem, DataStructs
 from rdkit.Chem.rdMolDescriptors import GetMACCSKeysFingerprint
 
 from mist import utils
-from mist.magma import magma_utils
 from mist.data import data, data_utils
+from mist.magma import magma_utils
 
 
 def get_mol_featurizer(mol_features, **kwargs):
     """ConsoleLogger."""
 
-    return {"none": NoneFeaturizer, "fingerprint": FingerprintFeaturizer,}[
+    return {
+        "none": NoneFeaturizer,
+        "fingerprint": FingerprintFeaturizer,
+    }[
         mol_features
     ](**kwargs)
 
@@ -618,7 +619,6 @@ class PeakFormula(SpecFeaturizer):
         inten_list = []
 
         for j in tree["fragments"]:
-
             # Compute fragments
             mol_form = j["molecularFormula"]
             mol_ind = j["id"]
@@ -847,7 +847,6 @@ class PeakFormula(SpecFeaturizer):
                 if chem_form_list is None or len(chem_form_list) == 0:
                     peak_smiles_list.append(None)
                 else:
-
                     # Figure out which of the chem formulae is _closest_
                     parent_form_ar = chem_form[None, :]
 
@@ -986,3 +985,7 @@ class PeakFormulaTest(PeakFormula):
         kwargs["magma_aux_loss"] = False
         kwargs["add_forward_specs"] = False
         super().__init__(**kwargs)
+
+
+if __name__ == "__main__":
+    pass

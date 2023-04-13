@@ -30,3 +30,7 @@ def paired_get_sirius_summary(dataset_name):
         f"data/paired_spectra/{dataset_name}/sirius_outputs/"
         f"summary_statistics/summary_df.tsv"
     )
+
+
+if __name__ == "__main__":
+    pass
