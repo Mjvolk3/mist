@@ -2,7 +2,7 @@
 id: 0a43jc12no3zbp1usbp7xhr
 title: MV-m1-startup
 desc: ''
-updated: 1681393851494
+updated: 1681401161852
 created: 1681385831673
 ---
 
@@ -23,6 +23,8 @@ wget https://bio.informatik.uni-jena.de/repository/dist-release-local/de/unijena
 unzip sirius-4.9.3-osx64-headless.zip
 rm sirius-4.9.3-osx64-headless.zip
 ```
+
+- Can redefine Sirius path where necessary. This is necessary for the quick start `source quickstart/02_run_sirius.sh`
 
 ## Quick Start
 
@@ -54,12 +56,12 @@ cd ../../
 
 ```bash
 mkdir results/model_train_demos
-python run_scripts/train_mist.py --cache-featurizers --dataset-name 'canopus_train_public' --fp-names morgan4096 --num-workers 10 --seed 1 --gpus 0 --split-file 'data/paired_spectra/canopus_train_public/splits/canopus_hplus_100_0.csv' --splitter-name 'preset' --augment-data --augment-prob 0.5 --batch-size 128 --inten-prob 0.1 --remove-prob 0.5 --remove-weights 'exp' --iterative-preds 'growing' --iterative-loss-weight 0.4 --learning-rate 0.00077 --weight-decay 1e-07 --max-epochs 600 --min-lr 0.0001 --lr-decay-time 10000 --lr-decay-frac 0.95 --hidden-size 256 --num-heads 8 --pairwise-featurization --peak-attn-layers 2 --refine-layers 4 --set-pooling 'cls' --spectra-dropout 0.1 --single-form-encoder --recycle-form-encoder --use-cls --cls-type 'ms1' --loss-fn 'cosine' --magma-aux-loss --frag-fps-loss-lambda 8 --magma-modulo 512 --patience 30 --save-dir 'mist_fp_model' --save-dir results/model_train_demos/mist_fp_model
+python run_scripts/train_mist.py --cache-featurizers --dataset-name 'canopus_train_public' --fp-names morgan4096 --num-workers 0 --seed 1 --gpus 0 --split-file 'data/paired_spectra/canopus_train_public/splits/canopus_hplus_100_0.csv' --splitter-name 'preset' --augment-data --augment-prob 0.5 --batch-size 128 --inten-prob 0.1 --remove-prob 0.5 --remove-weights 'exp' --iterative-preds 'growing' --iterative-loss-weight 0.4 --learning-rate 0.00077 --weight-decay 1e-07 --max-epochs 600 --min-lr 0.0001 --lr-decay-time 10000 --lr-decay-frac 0.95 --hidden-size 256 --num-heads 8 --pairwise-featurization --peak-attn-layers 2 --refine-layers 4 --set-pooling 'cls' --spectra-dropout 0.1 --single-form-encoder --recycle-form-encoder --use-cls --cls-type 'ms1' --loss-fn 'cosine' --magma-aux-loss --frag-fps-loss-lambda 8 --magma-modulo 512 --patience 30 --save-dir 'mist_fp_model' --save-dir results/model_train_demos/mist_fp_model
 ```
 
-- Changed --num-workers 10
-- [ ] Model  runs
-- [x] Is this the issues? pip install -U "ray[tune]". Not the issue.
+- Changed --num-workers 0
+  - There is some issue related to multiprocessing on Mac OS
+- [x] Model  runs
 
 ## FFN binned model
 
@@ -69,5 +71,3 @@ python run_scripts/train_ffn_binned.py --cache-featurizers --dataset-name 'canop
 
 - Changed --num-workers 10
 - [x] Model runs
-
-
