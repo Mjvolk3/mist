@@ -4,19 +4,19 @@ channels:
 - conda-forge
 dependencies:
 - python=3.8.*
-- matplotlib=3.4.*
-- rdkit=2021.03.*
-#- cudatoolkit=11.1 # may need to comment if cpu only
-- pytorch-lightning=1.6.* #1.7
-- pytorch::torchvision
-- torchmetrics=0.4.*
-- einops
-- pip=21.2.*
-- ipykernel=6.0.*
-- pytorch::pytorch=1.9.* #- dgl=0.7.*
-- nb_conda_kernels=2.3.*
-- seaborn=0.11.*
-- h5py
-- ray-tune
-- umap-learn
-- optuna
+- matplotlib=3.4.* # [x] mv
+- rdkit=2021.03.* # [x] mv conda didn't work → pip installed.
+#- cudatoolkit=11.1 # may need to comment if cpu only # [ ] mv
+- pytorch-lightning=1.6.* #1.7 # [x] mv → pip installed
+- pytorch::torchvision # [x] mv → pip
+- torchmetrics=0.4.* # [x] mv
+- einops # [x] mv → pip installed
+- pip=21.2.* # [x] mv → should already be installed
+- ipykernel=6.0.* # [x] mv → pip installed
+- pytorch::pytorch=1.9.* #- dgl=0.7.* # [x] mv pip installed
+- nb_conda_kernels=2.3.* # [x] mv → conda
+- seaborn=0.11.* # [x] mv → pip
+- h5py # [x] mv → pip
+- ray-tune # [x] mv → pip install -U "ray[tune]"
+- umap-learn # [x] mv → pip
+- optuna # [x] mv →pip

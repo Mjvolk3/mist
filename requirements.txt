@@ -1,8 +1,8 @@
-git+https://github.com/LiyuanLucasLiu/RAdam
-git+https://github.com/ray-project/ray_lightning#ray_lightning
-scikit-learn
-pathos
-hyperopt
-setuptools==59.5.0
-ray[air]
-CairoSVG
+git+https://github.com/LiyuanLucasLiu/RAdam # mv [x]
+git+https://github.com/ray-project/ray_lightning#ray_lightning # mv [x]
+scikit-learn # mv [x]
+pathos # mv [x]
+hyperopt # mv [x]
+setuptools==59.5.0 # mv [x]
+ray[air] # mv [ ] Have to skip this one. I tried to reinstall protobug<=3.20.1, but the installtion uninstalls it and then install 3.20.3, and reports an error.
+CairoSVG # mv [x]
