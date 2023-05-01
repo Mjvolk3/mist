@@ -71,41 +71,6 @@ class GCN(torch.nn.Module):
         return x
 
 
-class SumPermInvariantMLP(nn.Module):
-    def __init__(
-        self,
-        formula_dim: int = 21,
-        hidden_size: int = 256,
-        spectra_dropout: float = 0.5,
-    ):
-        super().__init__()
-        self.formula_dim = formula_dim
-        self.hidden_size = hidden_size
-        self.spectra_dropout = spectra_dropout
-        self.dense_encoder = nn.Sequential(
-            nn.Linear(self.formula_dim, self.hidden_size),
-            nn.ReLU(),
-            nn.Dropout(self.spectra_dropout),
-            nn.Linear(self.hidden_size, self.hidden_size),
-            nn.ReLU(),
-            nn.Dropout(self.spectra_dropout),
-        )
-
-    def forward(self, x):
-        x_mean = x.sum(
-            dim=-1, keepdim=True
-        )  # Average along the last dimension, shape: [batch_size, num_points, 1] or [batch_size, num_points, num_points, 1]
-        x = x_mean.repeat(
-            1, *([1] * (len(x.shape) - 2)), self.formula_dim
-        )  # Repeat the averaged representation for each feature, shape: [batch_size, num_points, formula_dim] or [batch_size, num_points, num_points, formula_dim]
-
-        x = self.dense_encoder(
-            x
-        )  # Apply dense_encoder to each point, shape: [batch_size, num_points, hidden_size] or [batch_size, num_points, num_points, hidden_size]
-
-        return x
-
-
 class MeanPermInvariantMLP(nn.Module):
     def __init__(
         self,
@@ -131,6 +96,41 @@ class MeanPermInvariantMLP(nn.Module):
             dim=-1, keepdim=True
         )  # Average along the last dimension, shape: [batch_size, num_points, 1] or [batch_size, num_points, num_points, 1]
         x = x_mean.repeat(
+            1, *([1] * (len(x.shape) - 2)), self.formula_dim
+        )  # Repeat the averaged representation for each feature, shape: [batch_size, num_points, formula_dim] or [batch_size, num_points, num_points, formula_dim]
+
+        x = self.dense_encoder(
+            x
+        )  # Apply dense_encoder to each point, shape: [batch_size, num_points, hidden_size] or [batch_size, num_points, num_points, hidden_size]
+
+        return x
+
+
+class SumPermInvariantMLP(nn.Module):
+    def __init__(
+        self,
+        formula_dim: int = 21,
+        hidden_size: int = 256,
+        spectra_dropout: float = 0.5,
+    ):
+        super().__init__()
+        self.formula_dim = formula_dim
+        self.hidden_size = hidden_size
+        self.spectra_dropout = spectra_dropout
+        self.dense_encoder = nn.Sequential(
+            nn.Linear(self.formula_dim, self.hidden_size),
+            nn.ReLU(),
+            nn.Dropout(self.spectra_dropout),
+            nn.Linear(self.hidden_size, self.hidden_size),
+            nn.ReLU(),
+            nn.Dropout(self.spectra_dropout),
+        )
+
+    def forward(self, x):
+        x_sum = x.sum(
+            dim=-1, keepdim=True
+        )  # Average along the last dimension, shape: [batch_size, num_points, 1] or [batch_size, num_points, num_points, 1]
+        x = x_sum.repeat(
             1, *([1] * (len(x.shape) - 2)), self.formula_dim
         )  # Repeat the averaged representation for each feature, shape: [batch_size, num_points, formula_dim] or [batch_size, num_points, num_points, formula_dim]
 
