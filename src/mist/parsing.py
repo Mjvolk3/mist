@@ -329,7 +329,13 @@ def add_mist_args(parser):
         action="store_true",
         help="If true, also include cls as separate entity",
     )
-
+    ma.add_argument(
+        "--form-encoder-type",
+        type=str,
+        help="Type of formula encoder",
+        choices=["mlp", "mean-perm-inv-mlp", "sum-perm-inv-mlp", "gcn", "gat", "cnn"],
+        default="mlp",
+    )
     ma.add_argument(
         "--single-form-encoder",
         default=False,

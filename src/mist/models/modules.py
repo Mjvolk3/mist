@@ -7,6 +7,7 @@ from torch import nn
 
 from mist import utils
 from mist.data import featurizers
+from mist.mlp_replacement import mlp_replace_register
 from mist.models import transformer_layer
 
 EPS = 1e-9
@@ -82,26 +83,23 @@ class FormulaTransformer(nn.Module):
         self.output_size = output_size
         self.dropout = nn.Dropout(spectra_dropout)
         self.recycle_form_encoder = recycle_form_encoder
-
+        # MV start
+        self.form_encoder_type = kwargs["form_encoder_type"]
+        # MV end
         self.num_types = featurizers.PeakFormula.num_types
         self.cls_type = featurizers.PeakFormula.cls_type
         self.additive_attn = additive_attn
         self.pairwise_featurization = pairwise_featurization
-
         # Define dense encoders and root formula encoder
         self.type_embedding_layer = nn.Embedding(self.num_types, self.hidden_size)
         self.single_form_encoder = single_form_encoder
         if self.single_form_encoder:
             self.formula_dim = utils.ELEMENT_DIM_MASS + self.num_types
-            dense_encoder = nn.Sequential(
-                nn.Linear(self.formula_dim, self.hidden_size),
-                nn.ReLU(),
-                nn.Dropout(spectra_dropout),
-                nn.Linear(self.hidden_size, self.hidden_size),
-                nn.ReLU(),
-                nn.Dropout(spectra_dropout),
+
+            self.formula_encoders = mlp_replace_register[self.form_encoder_type](
+                self.formula_dim, self.hidden_size, self.spectra_dropout
             )
-            self.formula_encoders = nn.ModuleList([dense_encoder])
+
             self.onehot_types = nn
 
         else:
@@ -123,7 +121,7 @@ class FormulaTransformer(nn.Module):
         if self.pairwise_featurization:
             # output_head_size = self.hidden_size // self.attn_heads
             if self.recycle_form_encoder:
-                self.pairwise_featurizer = self.formula_encoders[0]
+                self.pairwise_featurizer = self.formula_encoders
             else:
                 self.pairwise_featurizer = nn.Sequential(
                     nn.Linear(self.formula_dim, self.hidden_size),
@@ -167,7 +165,7 @@ class FormulaTransformer(nn.Module):
             one_hots = nn.functional.one_hot(peak_types, self.num_types)
             one_hots = one_hots.to(device)
             form_vec = torch.cat([form_vec, one_hots], -1)
-            peak_tensor = self.formula_encoders[0](form_vec)
+            peak_tensor = self.formula_encoders(form_vec)
         else:
             peak_tensor = torch.zeros(
                 (batch_size, form_vec.shape[1], self.hidden_size), device=device

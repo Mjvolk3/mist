@@ -199,6 +199,7 @@
                   "--refine-layers", "4",
                   "--set-pooling", "cls",
                   "--spectra-dropout", "0.1",
+                  "--form-encoder-type", "mean-perm-inv-mlp",
                   "--single-form-encoder",
                   "--recycle-form-encoder",
                   "--use-cls",
@@ -208,8 +209,8 @@
                   "--frag-fps-loss-lambda", "8",
                   "--magma-modulo", "512",
                   "--patience", "30",
-                  "--save-dir", "mist_fp_model",
-                  "--save-dir", "results/model_train_demos/mist_fp_model"
+                  "--save-dir", "mean-perm-inv-mlp",
+                  "--save-dir", "results/model_train_demos/mist_mean-perm-inv-mlp_model"
                 ]
               },
         ]
