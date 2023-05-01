@@ -200,6 +200,7 @@
                   "--set-pooling", "cls",
                   "--spectra-dropout", "0.1",
                   "--form-encoder-type", "mean-perm-inv-mlp",
+                  "--attn-prob-fn", "sparsemax",
                   "--single-form-encoder",
                   "--recycle-form-encoder",
                   "--use-cls",

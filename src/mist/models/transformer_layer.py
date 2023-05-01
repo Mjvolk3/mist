@@ -7,6 +7,7 @@ import math
 from typing import Callable, Optional, Tuple, Union
 
 import torch
+from sparsemax import Sparsemax
 from torch import Tensor
 from torch.nn import Dropout, LayerNorm, Linear, Module, Parameter
 from torch.nn import functional as F
@@ -61,6 +62,7 @@ class TransformerEncoderLayer(Module):
         norm_first: bool = False,
         additive_attn: bool = False,
         pairwise_featurization: bool = False,
+        attn_prob_fn: str = "softmax",
         device=None,
         dtype=None,
     ) -> None:
@@ -74,6 +76,7 @@ class TransformerEncoderLayer(Module):
             batch_first=batch_first,
             additive_attn=additive_attn,
             pairwise_featurization=self.pairwise_featurization,
+            attn_prob_fn=attn_prob_fn,
             **factory_kwargs,
         )
         # Implementation of Feedforward model
@@ -186,6 +189,7 @@ class MultiheadAttention(Module):
         num_heads,
         additive_attn=False,
         pairwise_featurization: bool = False,
+        attn_prob_fn: str = "softmax",
         dropout=0.0,
         batch_first=False,
         device=None,
@@ -195,6 +199,7 @@ class MultiheadAttention(Module):
         super(MultiheadAttention, self).__init__()
 
         self.embed_dim = embed_dim
+        self.attn_prob_fn = attn_prob_fn
         self.kdim = embed_dim
         self.vdim = embed_dim
         self._qkv_same_embed_dim = True
@@ -558,7 +563,7 @@ class MultiheadAttention(Module):
             new_attn_mask = torch.zeros_like(attn_mask, dtype=q.dtype)
             new_attn_mask.masked_fill_(attn_mask, float("-inf"))
             attn += attn_mask
-        attn = F.softmax(attn, dim=-1)
+        attn = F.softmax(attn, dim=-1)  # @mjvolk3 not used in default form README.md
         output = torch.bmm(attn, v)
         return output, attn
 
@@ -630,7 +635,11 @@ class MultiheadAttention(Module):
             new_attn_mask.masked_fill_(attn_mask, float("-inf"))
             attn += attn_mask
 
-        attn = F.softmax(attn, dim=-1)
+        if self.attn_prob_fn == "softmax":
+            attn = F.softmax(attn, dim=-1)
+        elif self.attn_prob_fn == "sparsemax":
+            sparsemax = Sparsemax(dim=-1)
+            attn = sparsemax(attn)
         if dropout_p > 0.0:
             attn = F.dropout(attn, p=dropout_p)
         # (B, Nt, Ns) x (B, Ns, E) -> (B, Nt, E)

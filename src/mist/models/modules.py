@@ -142,6 +142,7 @@ class FormulaTransformer(nn.Module):
             dropout=self.spectra_dropout,
             additive_attn=self.additive_attn,
             pairwise_featurization=pairwise_featurization,
+            attn_prob_fn=kwargs["attn_prob_fn"],
         )
         self.peak_attn_layers = _get_clones(peak_attn_layer, peak_attn_layers)
         self.bin_encoder = None

@@ -337,6 +337,14 @@ def add_mist_args(parser):
         default="mlp",
     )
     ma.add_argument(
+        "--attn-prob-fn",
+        type=str,
+        help="Type of attention probability function",
+        choices=["softmax", "sparsemax"],
+        default="softmax",
+    )
+
+    ma.add_argument(
         "--single-form-encoder",
         default=False,
         action="store_true",
