@@ -333,7 +333,16 @@ def add_mist_args(parser):
         "--form-encoder-type",
         type=str,
         help="Type of formula encoder",
-        choices=["mlp", "mean-perm-inv-mlp", "sum-perm-inv-mlp", "gcn", "gat", "cnn"],
+        choices=[
+            "mlp",
+            "mean-perm-inv-mlp",
+            "sum-perm-inv-mlp",
+            "meanagg-perm-inv-mlp",
+            "sumagg-perm-inv-mlp",
+            "gcn",
+            "gat",
+            "cnn",
+        ],
         default="mlp",
     )
     ma.add_argument(

@@ -199,7 +199,7 @@
                   "--refine-layers", "4",
                   "--set-pooling", "cls",
                   "--spectra-dropout", "0.1",
-                  "--form-encoder-type", "mean-perm-inv-mlp",
+                  "--form-encoder-type", "meanagg-perm-inv-mlp",
                   "--attn-prob-fn", "sparsemax",
                   "--single-form-encoder",
                   "--recycle-form-encoder",
