@@ -255,7 +255,7 @@ mlp_replace_register = {
     "sum-mlp": SumMlp,
     "mlp-mean-agg-mlp": MlpMeanAggMlp,
     "mlp-sum-agg-mlp": MlpSumAggMlp,
-    "gcn": GCN,
+    # "gcn": GCN,
 }
 
 
